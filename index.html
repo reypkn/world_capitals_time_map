@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Capitals Time Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body { margin: 0; }
+    #map { width: 100vw; height: 100vh; }
+    .label {
+      background: white;
+      border-radius: 8px;
+      padding: 4px 6px;
+      font-size: 0.8rem;
+      font-family: sans-serif;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    const capitals = [
+      {country: "Australia", city: "Canberra", lat: -35.282, lon: 149.128, tz: "Australia/Sydney"},
+      {country: "Canada", city: "Ottawa", lat: 45.4215, lon: -75.6972, tz: "America/Toronto"},
+      {country: "United States", city: "Washington, D.C.", lat: 38.8951, lon: -77.0364, tz: "America/New_York"},
+      {country: "China", city: "Beijing", lat: 39.9042, lon: 116.4074, tz: "Asia/Shanghai"},
+      {country: "Germany", city: "Berlin", lat: 52.52, lon: 13.405, tz: "Europe/Berlin"},
+      {country: "India", city: "New Delhi", lat: 28.6139, lon: 77.209, tz: "Asia/Kolkata"},
+      {country: "Russia", city: "Moscow", lat: 55.7558, lon: 37.6173, tz: "Europe/Moscow"},
+      {country: "United Kingdom", city: "London", lat: 51.5072, lon: -0.1276, tz: "Europe/London"},
+      {country: "Brazil", city: "Brasília", lat: -15.8267, lon: -47.9218, tz: "America/Sao_Paulo"},
+      {country: "France", city: "Paris", lat: 48.8566, lon: 2.3522, tz: "Europe/Paris"},
+      {country: "Japan", city: "Tokyo", lat: 35.6762, lon: 139.6503, tz: "Asia/Tokyo"},
+      {country: "Italy", city: "Rome", lat: 41.9028, lon: 12.4964, tz: "Europe/Rome"},
+      {country: "Saudi Arabia", city: "Riyadh", lat: 24.7136, lon: 46.6753, tz: "Asia/Riyadh"},
+      {country: "Switzerland", city: "Bern", lat: 46.9481, lon: 7.4474, tz: "Europe/Zurich"},
+      {country: "Mexico", city: "Mexico City", lat: 19.4326, lon: -99.1332, tz: "America/Mexico_City"},
+      {country: "Spain", city: "Madrid", lat: 40.4168, lon: -3.7038, tz: "Europe/Madrid"},
+      {country: "Algeria", city: "Algiers", lat: 36.7538, lon: 3.0588, tz: "Africa/Algiers"},
+      {country: "Argentina", city: "Buenos Aires", lat: -34.6037, lon: -58.3816, tz: "America/Argentina/Buenos_Aires"},
+      {country: "Kazakhstan", city: "Astana", lat: 51.1694, lon: 71.4491, tz: "Asia/Almaty"},
+      {country: "South Korea", city: "Seoul", lat: 37.5665, lon: 126.978, tz: "Asia/Seoul"},
+      {country: "Turkey", city: "Ankara", lat: 39.9208, lon: 32.8541, tz: "Europe/Istanbul"},
+      {country: "Indonesia", city: "Jakarta", lat: -6.2088, lon: 106.8456, tz: "Asia/Jakarta"},
+      {country: "New Zealand", city: "Wellington", lat: -41.2865, lon: 174.7762, tz: "Pacific/Auckland"},
+      {country: "Sweden", city: "Stockholm", lat: 59.3293, lon: 18.0686, tz: "Europe/Stockholm"}
+    ];
+
+    const map = L.map('map', {
+      worldCopyJump: true,
+      minZoom: 1.5,
+      maxZoom: 8,
+      zoomSnap: 0.25,
+      zoomDelta: 0.5
+    }).setView([20, 0], 2);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    function updateTimes() {
+      capitals.forEach(cap => {
+        const now = new Date();
+        const time = now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', timeZone: cap.tz});
+        if (!cap.marker) {
+          cap.marker = L.marker([cap.lat, cap.lon]).addTo(map);
+          cap.marker.bindTooltip(`<div class="label"><b>${cap.city}</b><br>${time}</div>`, {
+            permanent: true,
+            direction: 'top',
+            offset: [0, -10],
+            className: ''
+          }).openTooltip();
+        } else {
+          cap.marker.setTooltipContent(`<div class="label"><b>${cap.city}</b><br>${time}</div>`);
+        }
+      });
+    }
+
+    updateTimes();
+    setInterval(updateTimes, 60000);
+  </script>
+</body>
+</html>
