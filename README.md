@@ -22,4 +22,6 @@ Built with [Leaflet.js](https://leafletjs.com/) and vanilla JavaScript.
 *  Option to show **seconds** and update in real time.
 *  Dark mode tiles (ie. Carto or Mapbox).
 *  Responsive tweaks for mobile screens.
+*  Option to add new cities
+*  Option do display or hide cities
 
